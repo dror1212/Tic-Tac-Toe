@@ -30,6 +30,22 @@ class App extends Component<Iprops, Istate> {
     };
   }
 
+  componentDidMount() {
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
+  }
+
+  resize() {
+    const amount = Math.floor(window.innerWidth / 120);
+    if (this.state.areasToWin > amount) {
+      this.setState({
+        areasToWin: amount >= defaultAmount ? amount : defaultAmount
+      });
+      this.setState({ tempAreas: "" });
+      this.initGame(amount >= defaultAmount ? amount : defaultAmount);
+    }
+  }
+
   private initGame(newAmount?: number) {
     this.setState({
       boared: this.createBoared(newAmount ? newAmount : this.state.areasToWin),
@@ -147,14 +163,25 @@ class App extends Component<Iprops, Istate> {
           onSubmit={() => {
             // Change the boared to the size that was chosen
             if (
-              Number(this.state.tempAreas) < 8 &&
+              Number(this.state.tempAreas) <
+                Math.floor(window.innerWidth / 120) + 1 &&
               Number(this.state.tempAreas) > 2
             ) {
               this.setState({ areasToWin: Number(this.state.tempAreas) });
               this.setState({ tempAreas: "" });
               this.initGame(Number(this.state.tempAreas));
             } else {
-              this.setState({ err: "You can only choose between 3 to 7" });
+              if (Math.floor(window.innerWidth / 120) > 3) {
+                this.setState({
+                  err:
+                    "You can only choose between 3 to " +
+                    Math.floor(window.innerWidth / 120)
+                });
+              } else {
+                this.setState({
+                  err: "In your phone the max size is 3"
+                });
+              }
             }
           }}
         >
