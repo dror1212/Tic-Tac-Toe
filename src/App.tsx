@@ -50,14 +50,14 @@ class App extends Component<Iprops, Istate> {
     }
   }
 
-  private initGame(newAmount?: number) {
+  private initGame(newAmount?: number, nope?: boolean) {
     this.setState({
       turn: 0,
       win: "",
       err: "",
       first: !this.state.first,
     });
-    if (this.state.mode) {
+    if (this.state.mode && !nope) {
       if (this.state.first) {
         this.botTurn(true);
       } else {
@@ -256,7 +256,7 @@ class App extends Component<Iprops, Istate> {
           color="red"
           onClick={() => {
             this.setState({ mode: !this.state.mode });
-            this.initGame();
+            // this.initGame(undefined, !this.state.mode);
           }}
         >
           {this.state.mode ? "Play vs friend" : "Play vs computer"}
