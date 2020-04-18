@@ -15,6 +15,8 @@ interface Istate {
   err: string;
   areasToWin: number;
   tempAreas: string;
+  mode: boolean;
+  first: boolean;
 }
 
 class App extends Component<Iprops, Istate> {
@@ -26,7 +28,9 @@ class App extends Component<Iprops, Istate> {
       win: "",
       err: "",
       areasToWin: defaultAmount,
-      tempAreas: ""
+      tempAreas: "",
+      mode: true,
+      first: true,
     };
   }
 
@@ -39,7 +43,7 @@ class App extends Component<Iprops, Istate> {
     const amount = Math.floor(window.innerWidth / 120);
     if (this.state.areasToWin > amount) {
       this.setState({
-        areasToWin: amount >= defaultAmount ? amount : defaultAmount
+        areasToWin: amount >= defaultAmount ? amount : defaultAmount,
       });
       this.setState({ tempAreas: "" });
       this.initGame(amount >= defaultAmount ? amount : defaultAmount);
@@ -48,11 +52,51 @@ class App extends Component<Iprops, Istate> {
 
   private initGame(newAmount?: number) {
     this.setState({
-      boared: this.createBoared(newAmount ? newAmount : this.state.areasToWin),
       turn: 0,
       win: "",
-      err: ""
+      err: "",
+      first: !this.state.first,
     });
+    if (this.state.mode) {
+      if (this.state.first) {
+        this.botTurn(true);
+        console.log(this.state.turn);
+      } else {
+        this.setState({
+          boared: this.createBoared(
+            newAmount ? newAmount : this.state.areasToWin
+          ),
+        });
+      }
+    } else {
+      this.setState({
+        boared: this.createBoared(
+          newAmount ? newAmount : this.state.areasToWin
+        ),
+      });
+    }
+  }
+
+  private botTurn(turn?: boolean) {
+    const myTurn = turn ? 1 : this.state.turn + 1;
+    this.setState({ turn: myTurn + 1 });
+    const temp = turn
+      ? this.createBoared(this.state.areasToWin)
+      : this.state.boared;
+    let p = [0, 0];
+    temp.forEach((line, y) => {
+      line.forEach((space, x) => {
+        if (signs[space] === signs[signs.length - 1]) {
+          p = [y, x];
+        }
+      });
+    });
+    temp[p[0]][p[1]] = myTurn % 2;
+    if (!turn) {
+      this.checkWin(myTurn % 2);
+    } else {
+      this.setState({ boared: temp });
+    }
   }
 
   private createBoared(amount: number) {
@@ -133,11 +177,16 @@ class App extends Component<Iprops, Istate> {
                     const temp = { ...this.state.boared };
                     if (signs[temp[y][x]] === signs[signs.length - 1]) {
                       temp[y][x] = this.state.turn % 2;
-                      this.setState({ turn: this.state.turn + 1, err: "" });
-                      this.checkWin(this.state.turn % 2);
+                      const win = this.checkWin(this.state.turn % 2);
+                      this.setState({ err: "" });
+                      if (!win && this.state.mode) {
+                        this.botTurn();
+                      } else {
+                        this.setState({ turn: this.state.turn + 1 });
+                      }
                     } else {
                       this.setState({
-                        err: "You can choose only places that were not chosen"
+                        err: "You can choose only places that were not chosen",
                       });
                     }
                   }
@@ -175,11 +224,11 @@ class App extends Component<Iprops, Istate> {
                 this.setState({
                   err:
                     "You can only choose between 3 to " +
-                    Math.floor(window.innerWidth / 120)
+                    Math.floor(window.innerWidth / 120),
                 });
               } else {
                 this.setState({
-                  err: "In your phone the max size is 3"
+                  err: "In your phone the max size is 3",
                 });
               }
             }
@@ -193,7 +242,7 @@ class App extends Component<Iprops, Istate> {
               className="my-input"
               value={this.state.tempAreas}
               placeholder="Num of areas..."
-              onChange={e => {
+              onChange={(e) => {
                 // Make sure you can only get numbers
                 const temp = e.target.value[e.target.value.length - 1];
                 if ((temp >= "0" && temp <= "9") || temp === undefined)
@@ -202,6 +251,17 @@ class App extends Component<Iprops, Istate> {
             />
           </Form.Field>
         </Form>
+        <Button
+          className="place"
+          size="large"
+          color="red"
+          onClick={() => {
+            this.setState({ mode: !this.state.mode });
+            this.initGame();
+          }}
+        >
+          {this.state.mode ? "Play vs friend" : "Play vs computer"}
+        </Button>
         {this.state.win && (
           <Header size="large">{this.state.win + " won the game"}</Header>
         )}
