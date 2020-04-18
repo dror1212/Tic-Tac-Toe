@@ -60,7 +60,6 @@ class App extends Component<Iprops, Istate> {
     if (this.state.mode) {
       if (this.state.first) {
         this.botTurn(true);
-        console.log(this.state.turn);
       } else {
         this.setState({
           boared: this.createBoared(
