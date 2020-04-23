@@ -1,31 +1,68 @@
 .my-tic-tac-toe {
   align-items: center;
   text-align: center;
-  background-color: orange;
-  min-height: 100vh;
+  font-family: monospace !important;
 }
 
 .my-header {
   padding-top: 15px !important;
   padding-bottom: 15px !important;
-  background-color: orangered;
+  background-color: transparent;
+  color: white !important;
   max-width: 50vw;
   position: relative;
   left: 25vw;
-  font-weight: bolder;
+  font-weight: bolder !important;
+  border-radius: 36px;
+  border: 3.5px solid white !important;
+  font-family: monospace !important;
 }
 
 .my-input {
   max-width: 136px;
+  background-color: transparent !important;
+  color: white !important;
+  border: 2px solid white !important;
+  border-radius: 5px;
+}
+
+#root {
+  min-height: 100vh;
+  background-image: url("./images/VistaBlueBlack.jpg");
+  width: 100% !important;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .my-field {
   display: flex;
   justify-content: center;
   margin-top: 25px !important;
+  font-family: monospace !important;
+  background-color: transparent !important;
+}
+
+.black {
+  background-color: transparent !important;
+  color: white !important;
+  border: 2px solid white !important;
+  border-radius: 20px !important;
+  font-family: monospace !important;
 }
 
 .place {
   margin: 7px !important;
+  font-family: monospace !important;
+  border: 2px solid white !important;
+  background-color: transparent !important;
+  color: white !important;
+  border-radius: 20px !important;
+  font-family: monospace !important;
+}
+
+.white {
+  color: white !important;
   font-family: monospace !important;
 }

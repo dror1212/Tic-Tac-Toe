@@ -167,7 +167,6 @@ class App extends Component<Iprops, Istate> {
           {places.map((place, x) => {
             return (
               <Button
-                color="teal"
                 size="massive"
                 className="place"
                 onClick={() => {
@@ -234,7 +233,7 @@ class App extends Component<Iprops, Istate> {
           }}
         >
           <Form.Field className="my-field">
-            <Button color="twitter" type="submit">
+            <Button className="black" type="submit">
               Apply Changes
             </Button>
             <Input
@@ -253,7 +252,6 @@ class App extends Component<Iprops, Istate> {
         <Button
           className="place"
           size="large"
-          color="red"
           onClick={() => {
             this.setState({ mode: !this.state.mode });
             // this.initGame(undefined, !this.state.mode);
@@ -262,13 +260,19 @@ class App extends Component<Iprops, Istate> {
           {this.state.mode ? "Play vs friend" : "Play vs computer"}
         </Button>
         {this.state.win && (
-          <Header size="large">{this.state.win + " won the game"}</Header>
+          <Header size="large" className="white">
+            {this.state.win + " won the game"}
+          </Header>
         )}
-        {this.state.err && <Header size="large">{this.state.err}</Header>}
+        {this.state.err && (
+          <Header size="large" className="white">
+            {this.state.err}
+          </Header>
+        )}
         {this.state.win && (
           <Button
+            className="place"
             size="large"
-            color="red"
             onClick={() => {
               // Start the game again
               this.initGame();
