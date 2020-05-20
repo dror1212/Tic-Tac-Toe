@@ -9,7 +9,8 @@
   padding-bottom: 15px !important;
   background-color: transparent;
   color: white !important;
-  max-width: 50vw;
+  width: 50vw;
+  min-width: 250px;
   position: relative;
   left: 25vw;
   font-weight: bolder !important;
